@@ -83,7 +83,7 @@
     S.save(); UI.closeModal(); UI.toast('Thanks for your review!'); App.rerender(); };
   A.invoice = (el) => { const o = S.db.orders.find(x => x.id === el.dataset.id); const u = S.user(o.userId);
     const rows = o.items.map(i => `<tr><td>${esc(i.name)}</td><td>${inr(i.price)}</td></tr>`).join('');
-    UI.modal(`<div class="invoice" id="cert"><div class="row between"><div class="brand"><span class="brand-mark">p</span>pretoy</div><div class="right"><b>Tax invoice (demo)</b><small class="block">${o.id} · ${UI.date(o.createdAt)}</small></div></div>
+    UI.modal(`<div class="invoice" id="cert"><div class="row between"><img class="certlogo" src="img/pretoy-logo.png" alt="Pretoy"><div class="right"><b>Tax invoice (demo)</b><small class="block">${o.id} · ${UI.date(o.createdAt)}</small></div></div>
       <p class="small"><b>Billed to:</b> ${esc(u.name)}, ${esc(o.address.line)}, ${esc(o.address.city)} ${esc(o.address.pin)}</p>
       <table class="cert-table"><thead><tr><th>Item</th><th>Amount</th></tr></thead><tbody>${rows}<tr><td>Delivery</td><td>${inr(o.shipping)}</td></tr>${o.gift.price ? `<tr><td>Gift box</td><td>${inr(o.gift.price)}</td></tr>` : ''}${o.discount ? `<tr><td>Discount</td><td>−${inr(o.discount)}</td></tr>` : ''}${o.credit ? `<tr><td>Store credit</td><td>−${inr(o.credit)}</td></tr>` : ''}
       <tr><th>Total (incl. GST, demo)</th><th>${inr(o.total)}</th></tr></tbody></table><p class="small muted">Payment ${esc(o.payment.method)} · Ref ${esc(o.payment.ref)} · Test mode. Pre-owned goods; GST under margin scheme in a live version.</p></div>

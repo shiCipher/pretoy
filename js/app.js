@@ -39,7 +39,7 @@
     const unread = user ? S.db.notifications.filter(n => (n.userId === user.id || (user.role === 'admin' && n.userId === 'admin')) && !n.read).length : 0;
     const nav = [['shop', 'Shop'], ['sell', 'Sell'], ['rent', 'Rent'], ['business', 'For Business'], ['how', 'How it works']];
     return `<div class="topbar">
-      <a class="brand" href="#/"><span class="brand-mark">p</span>pretoy</a>
+      <a class="brand" href="#/" aria-label="Pretoy home"><img class="logo" src="img/pretoy-logo.png" alt="Pretoy"></a>
       <nav class="mainnav" id="mainnav">${nav.map(([k, l]) => `<a href="#/${k}" class="${route.name === k ? 'on' : ''}">${l}</a>`).join('')}
         ${user && user.role === 'admin' ? `<a href="#/admin" class="adminlink ${route.name === 'admin' ? 'on' : ''}">Admin desk</a>` : ''}</nav>
       <form class="hsearch" data-form="hsearch" role="search"><input name="q" placeholder="Search toys, brands…" aria-label="Search toys" value="${esc(route.name === 'shop' ? route.q.q || '' : '')}"></form>
@@ -55,7 +55,7 @@
       </div></div>`;
   }
   function footer() {
-    return `<div class="wrap foot"><div><a class="brand" href="#/"><span class="brand-mark">p</span>pretoy</a><p>Good toys deserve more play. Certified pre-loved toys, delivered across India.</p></div>
+    return `<div class="wrap foot"><div><a class="brand footlogo" href="#/" aria-label="Pretoy home"><img src="img/pretoy-logo.png" alt="Pretoy"></a><p>Premium toys, second childhood. Certified pre-loved toys, delivered across India.</p></div>
       <div><h4>Shop</h4><a href="#/shop">All toys</a><a href="#/shop?src=certified">Pretoy Certified</a><a href="#/shop?src=p2p">Community listings</a><a href="#/rent">Toy rental</a></div>
       <div><h4>Sell</h4><a href="#/sell">Instant valuation</a><a href="#/list">List it yourself</a><a href="#/my-sales">Track a pickup</a><a href="#/business">Bulk & CSR</a></div>
       <div><h4>Trust</h4><a href="#/verify">Verify a certificate</a><a href="#/how">Quality Seal</a><a href="#/privacy">Privacy notice (DPDP)</a><a href="#/terms">Terms & returns</a></div></div>
@@ -82,11 +82,11 @@
     const sold = S.db.orders.reduce((a, o) => a + o.items.length, 0) + 1240;
     App.title = 'Certified pre-loved toys';
     return `<section class="hero"><div class="wrap hero-grid"><div>
-      <p class="eyebrow">A second life for little favourites</p><h1>Good toys deserve <em>more play.</em></h1>
+      <p class="eyebrow">Premium toys, second childhood</p><h1>Good toys deserve <em>more play.</em></h1>
       <p class="lead">Premium pre-loved toys, inspected on 5 points, deep-cleaned and certified with the Pretoy Quality Seal. Up to 70% below MRP, with 15-day easy returns.</p>
       <div class="row gap wrapit"><a class="btn dark lg" href="#/shop">Shop certified toys</a><a class="btn light lg" href="#/sell">Get an instant valuation</a></div>
       <div class="trust"><span>🛡️ 5-point Quality Seal</span><span>↩︎ 15-day returns</span><span>🚚 Free home pickup</span><span>🎁 Gift-ready boxes</span></div></div>
-      <div class="hero-art"><div class="sun"></div><div class="hero-card"><span>🧸</span><b>LOVED BEFORE.<br>READY AGAIN.</b><small class="sealchip">✓ PTY QUALITY SEAL</small></div><div class="float f1">♻</div><div class="float f2">✳</div><div class="float f3">🪀</div></div></div></section>
+      <div class="hero-art"><div class="sun"></div><div class="hero-card"><img src="img/pretoy-mark.png" alt="" class="heromark"><b>LOVED BEFORE.<br>READY AGAIN.</b><small class="sealchip">✓ PTY QUALITY SEAL</small></div><div class="float f1">♻</div><div class="float f2">✳</div><div class="float f3">🪀</div></div></div></section>
     <section class="wrap pad"><div class="impact">
       <div><b>${sold.toLocaleString('en-IN')}+</b><span>toys rehomed</span></div><div><b>${(sold * 0.42).toFixed(0)} kg</b><span>plastic kept from landfill</span></div>
       <div><b>${inr(sold * 1150)}</b><span>saved by parents</span></div><div><b>4.8 ★</b><span>average rating</span></div></div></section>
@@ -172,7 +172,7 @@
     const p = S.db.products.find(x => x.certCode && x.certCode.toUpperCase() === code.toUpperCase());
     App.title = 'Certificate ' + code;
     if (!p) return `<section class="wrap pad narrow"><div class="empty"><span>⚠️</span><h3>Certificate “${esc(code)}” not found</h3><p>Check the code on the toy's tag and try again.</p><a href="#/verify" class="btn dark">Verify another</a></div></section>`;
-    return `<section class="wrap pad narrow"><div class="cert" id="cert"><div class="cert-head"><div class="brand"><span class="brand-mark">p</span>pretoy</div><div class="stamp">✓ VERIFIED</div></div>
+    return `<section class="wrap pad narrow"><div class="cert" id="cert"><div class="cert-head"><img class="certlogo" src="img/pretoy-logo.png" alt="Pretoy"><div class="stamp">✓ VERIFIED</div></div>
       <p class="eyebrow">Certificate of Quality</p><h2>${esc(p.name)}</h2><p class="muted">${esc(p.brand)} · ${esc(p.category)} · Ages ${esc(p.age)}</p>
       <div class="cert-meta"><div><small>Certificate no.</small><b>${esc(p.certCode)}</b></div><div><small>Grade</small><b>${p.grade} · ${R.gradeLabels[p.grade]}</b></div><div><small>Inspected</small><b>${UI.date(p.inspectedAt)}</b></div><div><small>Inspector</small><b>${esc(p.inspector)}</b></div></div>
       <table class="cert-table"><thead><tr><th>Check</th><th>What we verified</th><th>Score</th><th>Result</th></tr></thead><tbody>
@@ -415,7 +415,7 @@
   /* ---------------- AUTH ---------------- */
   App.views.login = (route) => {
     App.title = 'Log in'; const next = route.q.next || '#/';
-    return `<section class="wrap pad auth"><div class="panel"><h2>Welcome back</h2><p class="muted">Log in to buy, sell, rent and track orders.</p>
+    return `<section class="wrap pad auth"><div class="panel"><img class="authlogo" src="img/pretoy-mark.png" alt=""><h2>Welcome back</h2><p class="muted">Log in to buy, sell, rent and track orders.</p>
       <form data-form="login" data-next="${esc(next)}"><label>Email<input name="email" type="email" required autocomplete="username"></label><label>Password<input name="password" type="password" required autocomplete="current-password"></label>
       <button class="btn dark lg full">Log in</button></form><div class="row between small mt"><a href="#/forgot">Forgot password?</a><a href="#/register?next=${encodeURIComponent(next)}">Create an account</a></div></div>
       <div class="panel demo"><h3>Demo accounts</h3><p class="small muted">One click to log in as each role.</p>
@@ -424,7 +424,7 @@
   };
   App.views.register = (route) => {
     App.title = 'Create account';
-    return `<section class="wrap pad auth one"><div class="panel"><h2>Create your Pretoy account</h2><p class="muted">One account to buy, sell, list and rent.</p>
+    return `<section class="wrap pad auth one"><div class="panel"><img class="authlogo" src="img/pretoy-mark.png" alt=""><h2>Create your Pretoy account</h2><p class="muted">One account to buy, sell, list and rent.</p>
       <form data-form="register" data-next="${esc(route.q.next || '#/')}"><label>Full name<input name="name" required autocomplete="name"></label><label>Email<input name="email" type="email" required autocomplete="email"></label>
       <label>Mobile<input name="phone" pattern="[0-9]{10}" placeholder="10-digit mobile" autocomplete="tel"></label><label>Password<input name="password" type="password" minlength="6" required autocomplete="new-password"><small class="muted">At least 6 characters.</small></label>
       <fieldset class="consent"><legend>Your consent (DPDP Act, 2023)</legend>
