@@ -1,4 +1,4 @@
-# Pretoy v2: refined proof-of-concept
+# Pretoy v2: proof-of-concept
 
 Pretoy is a C2B2C marketplace for certified pre-loved toys. This version runs entirely in the browser. It has **no server, no database and nothing to install**, and costs nothing to run or host.
 
